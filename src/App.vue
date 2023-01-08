@@ -1,6 +1,9 @@
 <script setup>
 import { RouterLink, RouterView } from "vue-router";
 import HelloWorld from "./components/HelloWorld.vue";
+import Vertex from "./shader/test/Vertex.glsl?raw";
+
+console.log(Vertex)
 </script>
 
 <template>
