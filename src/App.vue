@@ -10,7 +10,8 @@ import { RouterLink, RouterView } from "vue-router";
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/indoorroaming">IndoorRoaming</RouterLink>
         <RouterLink to="/indoorroaming2">IndoorRoaming2</RouterLink>
-        <RouterLink to="/cube2048">cube2048</RouterLink>
+        <RouterLink to="/cube2048">Cube2048</RouterLink>
+        <RouterLink to="/smartcity">SmartCity</RouterLink>
       </nav>
     </div>
   </header>

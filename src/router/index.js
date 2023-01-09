@@ -20,18 +20,17 @@ const router = createRouter({
     {
       path: "/indoorroaming2",
       name: "IndoorRoaming2",
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import("../views/IndoorRoaming2.vue"),
     },
     {
       path: "/cube2048",
-      name: "cube2048",
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import("../views/cube2048.vue"),
+      name: "Cube2048",
+      component: () => import("../views/Cube2048.vue"),
+    },
+    {
+      path: "/smartcity",
+      name: "SmartCity",
+      component: () => import("../views/SmartCity.vue"),
     },
   ],
 });
