@@ -2,6 +2,7 @@ import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import scene from '../scene'
 import modifyCityMaterial from '../modify/modifyCityMaterial'
+import FlyLine from './flyLine'
 
 export default function createCity() {
   const gltfLoader = new GLTFLoader()
@@ -17,5 +18,9 @@ export default function createCity() {
       }
     })
     scene.add(gltf.scene)
+
+    // 添加飞线
+    const flyLine = new FlyLine()
+    scene.add(flyLine.mesh) 
   })
 }
