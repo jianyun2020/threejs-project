@@ -15,7 +15,7 @@ export default function modifyCityMaterial(mesh) {
     addGradColor(shader, mesh);
     addSpread(shader);
     addLightLine(shader);
-
+    addToTopLine(shader);
   };
 }
 
@@ -151,5 +151,41 @@ export function addLightLine(shader) {
     duration: 5,
     ease: 'none',
     repeat: -1
+  })
+}
+
+// 从下向上扫描
+export function addToTopLine(shader) {
+  // 设置时间
+  shader.uniforms.uToTopLineTime = { value: -100 }
+  // 设置线的宽度
+  shader.uniforms.uToTopLineWidth = { value: 5 }
+
+  shader.fragmentShader = shader.fragmentShader.replace(
+    "#include <common>",
+    `
+      #include <common>
+      
+      uniform float uToTopLineTime;
+      uniform float uToTopLineWidth;
+    `
+  )
+
+  shader.fragmentShader = shader.fragmentShader.replace(
+    "// #end#",
+    `
+      float ToTopLineMix = -(vPosition.y - uToTopLineTime) * (vPosition.y - uToTopLineTime) + uToTopLineWidth;
+
+      if (ToTopLineMix > 0.0) {
+        gl_FragColor = mix(gl_FragColor, vec4(0.8, 0.8, 1, 1), ToTopLineMix / uToTopLineWidth);
+      }
+    `
+  )
+
+  gsap.to(shader.uniforms.uToTopLineTime, {
+    value: 100,
+    duration: 2,
+    ease: 'none',
+    repeat: -1,
   })
 }
