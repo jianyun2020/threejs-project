@@ -5,6 +5,7 @@ import modifyCityMaterial from '../modify/modifyCityMaterial'
 import FlyLine from './flyLine'
 import FlyLineShader from './flyLineShader'
 import MeshLine from './meshLine'
+import LightWall from './lightWall'
 
 export default function createCity() {
   const gltfLoader = new GLTFLoader()
@@ -20,7 +21,7 @@ export default function createCity() {
 
         if (item.name === 'Layerbuildings') {
           const meshLine = new MeshLine(item.geometry)
-          const scale = item.scale.x * 1.0001
+          const scale = item.scale.x * 1.001
           meshLine.mesh.scale.set(scale, scale, scale)
           meshLine.mesh.position.set(item.position.x, item.position.y, item.position.z)
           scene.add(meshLine.mesh)
@@ -36,5 +37,9 @@ export default function createCity() {
     // 添加着色器飞线
     const flyLineShader = new FlyLineShader()
     scene.add(flyLineShader.mesh)
+
+    // 添加光墙
+    const lightWall = new LightWall()
+    scene.add(lightWall.mesh)
   })
 }
