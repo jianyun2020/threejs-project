@@ -6,6 +6,7 @@ import FlyLine from './flyLine'
 import FlyLineShader from './flyLineShader'
 import MeshLine from './meshLine'
 import LightWall from './lightWall'
+import LightRadar from './lightRadar'
 
 export default function createCity() {
   const gltfLoader = new GLTFLoader()
@@ -41,5 +42,9 @@ export default function createCity() {
     // 添加光墙
     const lightWall = new LightWall()
     scene.add(lightWall.mesh)
+
+    // 添加雷达
+    const lightRadar = new LightRadar()
+    scene.add(lightRadar.mesh)
   })
 }

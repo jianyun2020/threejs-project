@@ -5,7 +5,7 @@ import fragment from "@/shader/lightWall/fragment.glsl?raw"
 
 export default class LightWall {
   constructor() {
-    this.geometry = new THREE.CylinderBufferGeometry(5, 5, 2, 32, 1, true)
+    this.geometry = new THREE.CylinderGeometry(5, 5, 2, 32, 1, true)
     this.material = new THREE.ShaderMaterial({
       vertexShader: vertex,
       fragmentShader: fragment,
