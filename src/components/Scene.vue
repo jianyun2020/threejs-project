@@ -1,6 +1,5 @@
 <template>
   <div class="scene" ref="sceneDiv"></div>
-  哈哈哈
 </template>
 
 <script setup>
