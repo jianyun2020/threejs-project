@@ -1,24 +1,24 @@
-import * as THREE from 'three'
-import gsap from 'gsap'
-import vertex from '@/shader/flyLine/vertex.glsl?raw'
-import fragment from '@/shader/flyLine/fragment.glsl?raw'
+import * as THREE from "three";
+import gsap from "gsap";
+import vertex from "@/shader/flyLine/vertex.glsl?raw";
+import fragment from "@/shader/flyLine/fragment.glsl?raw";
 
 export default class FlyLineShader {
-  constructor() {
+  constructor(position = { x: 0, z: 0 }, color = 0x00ffff) {
     // 1. 根据点生成曲线
     const linePoints = [
       new THREE.Vector3(0, 0, 0),
-      new THREE.Vector3(-5, 5, 0),
-      new THREE.Vector3(-10, 0, 0)
-    ]
+      new THREE.Vector3(position.x / 2, 4, position.z / 2),
+      new THREE.Vector3(position.x/2, 0, position.z/2),
+    ];
     // 创建曲线
-    this.lineCurve = new THREE.CatmullRomCurve3(linePoints)
-    const points = this.lineCurve.getPoints(1000)
-    
+    this.lineCurve = new THREE.CatmullRomCurve3(linePoints);
+    const points = this.lineCurve.getPoints(1000);
+
     // 2. 创建几何体顶点
-    this.geometry = new THREE.BufferGeometry().setFromPoints(points)
+    this.geometry = new THREE.BufferGeometry().setFromPoints(points);
     // 给每一个顶点设置属性
-    const aSizeArray = new Float32Array(points.length)
+    const aSizeArray = new Float32Array(points.length);
     for (let i = 0; i < aSizeArray.length; i++) {
       aSizeArray[i] = i;
     }
@@ -26,7 +26,7 @@ export default class FlyLineShader {
     this.geometry.setAttribute(
       "aSize",
       new THREE.BufferAttribute(aSizeArray, 1)
-    )
+    );
 
     // 3. 设置着色器材质
     this.shaderMaterial = new THREE.ShaderMaterial({
@@ -40,22 +40,29 @@ export default class FlyLineShader {
           value: 0,
         },
         uColor: {
-          value: new THREE.Color(0xffff00)
+          value: new THREE.Color(color),
         },
         uLength: {
-          value: points.length
-        }
-      }
-    })
+          value: points.length,
+        },
+      },
+    });
 
-    this.mesh = new THREE.Points(this.geometry, this.shaderMaterial)
+    this.mesh = new THREE.Points(this.geometry, this.shaderMaterial);
 
     // 改变uTime来控制动画
     gsap.to(this.shaderMaterial.uniforms.uTime, {
       value: 1000,
       duration: 1,
       repeat: -1,
-      ease: 'none'
-    })
+      ease: "none",
+    });
+  }
+
+  remove () {
+    this.mesh.remove()
+    this.mesh.removeFromParent()
+    this.mesh.geometry.dispose()
+    this.mesh.material.dispose()
   }
 }

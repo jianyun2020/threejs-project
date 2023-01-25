@@ -4,8 +4,8 @@ import vertex from "@/shader/lightRadar/vertex.glsl?raw";
 import fragment from "@/shader/lightRadar/fragment.glsl?raw";
 
 export default class LightRadar {
-  constructor() {
-    this.geometry = new THREE.PlaneGeometry(4, 4);
+  constructor(radius=2,position={x:0,z:0}, color=0xff0000) {
+    this.geometry = new THREE.PlaneGeometry(radius, radius);
     this.material = new THREE.ShaderMaterial({
       vertexShader: vertex,
       fragmentShader: fragment,
@@ -13,7 +13,7 @@ export default class LightRadar {
       side: THREE.DoubleSide,
       uniforms: {
         uColor: {
-          value: new THREE.Color("#ff00ff")
+          value: new THREE.Color(color)
         },
         uTime: {
           value: 0
@@ -22,7 +22,7 @@ export default class LightRadar {
     });
 
     this.mesh = new THREE.Mesh(this.geometry, this.material);
-    this.mesh.position.set(-8, 1, 5);
+    this.mesh.position.set(position.x,1, position.z);
     this.mesh.rotateX(-Math.PI / 2);
 
     gsap.to(this.material.uniforms.uTime,{
@@ -31,5 +31,12 @@ export default class LightRadar {
       repeat: -1,
       ease: 'none'
     })
+  }
+
+  remove() {
+    this.mesh.remove()
+    this.mesh.removeFromParent()
+    this.mesh.geometry.dispose()
+    this.mesh.material.dispose()
   }
 }

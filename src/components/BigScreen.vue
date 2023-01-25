@@ -3,41 +3,87 @@
     <div class="header">智慧城市管理平台</div>
     <div class="main">
       <div class="left">
-        <div class="cityEvent">
+        <div class="cityEvent" v-for="item in props.dataInfo">
           <h3>
-            <span>治安事件</span>
+            <span>{{ item.name }}</span>
           </h3>
           <h1>
             <img src="@/assets/bg/bar.svg" class="icon" />
-            <span>888（台）</span>
+            <span>{{ toFixInt(item.number) }}（{{ item.unit }}）</span>
           </h1>
           <div class="footerBorder"></div>
         </div>
       </div>
-      <div class="right"></div>
+      <div class="right">
+        <div class="cityEvent list">
+          <h3>
+            <span>事件列表</span>
+          </h3>
+          <ul>
+            <li
+              v-for="(item, i) in props.eventList"
+              :class="{ active: currentActive == i }"
+              @click="toggleEvent(i)"
+            >
+              <h1>
+                <div>
+                  <img class="icon" :src="imgs[item.name]" />
+                  <span> {{ item.name }} </span>
+                </div>
+                <span class="time"> {{ item.time }} </span>
+              </h1>
+              <p>{{ item.type }}</p>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { useStore } from '../stores';
+import {ref} from 'vue'
+import { useStore } from "../stores";
+import eventHub from "@/utils/eventHub";
 
-const store = useStore()
-store.navState = !store.navState
+const props = defineProps(["dataInfo", "eventList"]);
+const imgs = {
+  电力: new URL("@/assets/bg/dianli.svg", import.meta.url).href,
+  火警: new URL("@/assets/bg/fire.svg", import.meta.url).href,
+  治安: new URL("@/assets/bg/jingcha.svg", import.meta.url).href
+};
 
+const toFixInt = (num) => {
+  return num.toFixed(0);
+};
+
+
+const currentActive = ref(null);
+eventHub.on("spriteClick", (data) => {
+  // console.log(data);
+  currentActive.value = data.i;
+});
+const toggleEvent = (i) => {
+  currentActive.value = i;
+  eventHub.emit("eventToggle", i);
+};
+
+const store = useStore();
+store.navState = !store.navState;
 </script>
 
 <style scoped>
 #bigScreen {
-  position: fixed;
   width: 100vw;
   height: 100vh;
+  position: fixed;
+  z-index: 100;
+
   left: 0;
   top: 0;
   pointer-events: none;
   display: flex;
   flex-direction: column;
-  z-index: 99;
 }
 
 .header {
@@ -61,6 +107,7 @@ store.navState = !store.navState
   display: flex;
   justify-content: space-between;
 }
+
 .left {
   width: 4rem;
   /* background-color: rgb(255,255,255,0.5); */
@@ -73,7 +120,6 @@ store.navState = !store.navState
   align-items: center;
   padding: 0.4rem 0;
 }
-
 
 .right {
   width: 4rem;
@@ -120,8 +166,6 @@ store.navState = !store.navState
   content: "";
   display: block;
 }
-
-
 .footerBorder {
   position: absolute;
   bottom: 0;
